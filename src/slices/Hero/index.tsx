@@ -6,12 +6,16 @@ import { PrismicRichText, SliceComponentProps } from "@prismicio/react";
 "@prismicio/client";
 import gsap from "gsap";
 import { useGSAP } from "@gsap/react";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import { Bounded } from "@/components/Bounded";
 import Button from "@/components/Button";
 import { TextSplitter } from "@/components/TextSplitter";
 
-gsap.registerPlugin(useGSAP);
+gsap.registerPlugin(
+  useGSAP,
+  ScrollTrigger
+);
 
 
 /**
@@ -53,6 +57,38 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
         y: 10,
         duration: 0.6,
       });
+
+      const scrollTl = gsap.timeline({
+        scrollTrigger: {
+          trigger: ".hero",
+          start: "top top",
+          end: "bottom bottom",
+          scrub: 1.5,
+          markers: true,
+        }
+      });
+
+      scrollTl
+        .fromTo("body", {
+          backgroundColor: "#FDE047",
+        }, {
+          backgroundColor: "#d9f99d",
+          overwrite: "auto",
+        },
+        1,)
+        .from(".text-side-heading .split-char", {
+          scale: 1.3,
+          y: 40,
+          rotate: -25,
+          opacity: 0,
+          stagger: 0.1,
+          ease: "back.out(3)",
+          duration: .5,
+        })
+        .from(".text-side-body", {
+          y: 20,
+          opacity: 0,
+        });
   });
 
   return (
@@ -101,7 +137,6 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
             </h2>
             <div className="text-side-body mt-4 max-w-xl text-balance text-xl font-normal text-sky-950">
               <PrismicRichText field={slice.primary.second_body} />
-              {/* <PrismicRichText field={slice.primary.second_body} /> */}
             </div>
           </div>
         </div>
