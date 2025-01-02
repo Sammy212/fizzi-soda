@@ -64,7 +64,6 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
           start: "top top",
           end: "bottom bottom",
           scrub: 1.5,
-          markers: true,
         }
       });
 
