@@ -26,7 +26,8 @@
     "next": "^14.2.20",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
-    "three": "^0.172.0"
+    "three": "^0.172.0",
+    "zustand": "^5.0.2"
   },
   "devDependencies": {
     "@slicemachine/adapter-next": "^0.3.61",
