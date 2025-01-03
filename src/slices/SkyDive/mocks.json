@@ -1,0 +1,19 @@
+[
+	{
+		"__TYPE__": "SharedSliceContent",
+		"variation": "default",
+		"primary": {
+			"sentence": {
+				"__TYPE__": "FieldContent",
+				"type": "Text",
+				"value": "forestd  "
+			},
+			"flavor": {
+				"__TYPE__": "FieldContent",
+				"value": "lemonLime",
+				"type": "Select"
+			}
+		},
+		"items": []
+	}
+]
