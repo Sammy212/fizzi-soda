@@ -15,6 +15,7 @@ import { TextSplitter } from "@/components/TextSplitter";
 import Scene from "./Scene";
 import { Bubbles } from "@/components/Bubbles";
 import { useStore } from "@/hooks/useStore";
+import { useMediaQuery } from "@/hooks/useMediaQuery";
 
 gsap.registerPlugin(
   useGSAP,
@@ -33,9 +34,10 @@ export type HeroProps = SliceComponentProps<Content.HeroSlice>;
 const Hero = ({ slice }: HeroProps): JSX.Element => {
 
   const ready = useStore((state) => state.ready);
+  const isDesktop = useMediaQuery("(min-width: 768px)", true); // Check if the device is desktop
 
   useGSAP(() => {
-    if (!ready) return;
+    if (!ready && isDesktop) return; // Check if the elements are ready
 
     const introTl = gsap.timeline();
 
@@ -96,7 +98,7 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
           y: 20,
           opacity: 0,
         });
-  }, {dependencies: [ready]});
+  }, {dependencies: [ready, isDesktop]}); // Run the animation when the elements are ready
 
   return (
     <Bounded
@@ -104,16 +106,19 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
       data-slice-variation={slice.variation}
       className="hero opacity-0"
     >
-      <View
-        className="hero-scene pointer-events-none sticky top-0 z-50 -mt-[100vh] hidden h-screen w-screen md:block"
-      >
-        <Scene/>
-        <Bubbles
-          count={300}
-          speed={2}
-          repeat={true}
-        /> {/* Add bubbles component */}
-      </View>
+      {isDesktop && (
+          <View
+            className="hero-scene pointer-events-none sticky top-0 z-50 -mt-[100vh] hidden h-screen w-screen md:block"
+          >
+            <Scene/>
+            <Bubbles
+              count={300}
+              speed={2}
+              repeat={true}
+            /> {/* Add bubbles component */}
+          </View>
+      )}
+
       <div className="grid">
         <div className="grid h-screen place-items-center">
           <div className="grid auto-rows-min place-items-center text-center">

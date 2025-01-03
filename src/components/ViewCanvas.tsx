@@ -4,6 +4,7 @@ import { Canvas } from "@react-three/fiber";
 import { Environment, Float, View } from "@react-three/drei";
 import FloatingCan from "@/components/FloatingCan";
 import Scene from "@/slices/Hero/Scene";
+import {Perf} from "r3f-perf"
 
 type Props = {};
 
@@ -27,6 +28,7 @@ export default function ViewCanvas({}: Props) {
       }}
     >
       <View.Port />
+      {/* <Perf /> */}
     </Canvas>
   );
 }
