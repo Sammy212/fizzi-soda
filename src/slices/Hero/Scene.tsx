@@ -61,7 +61,7 @@ export default function Scene({}: Props) {
             },
         });
 
-        // only load animation if the user is at the top of the page
+        // only load intro animation if the user is at the top of the page
         if (window.scrollY < 20) {
         // Intro animation
             intoTl

@@ -13,6 +13,7 @@ import Button from "@/components/Button";
 import { TextSplitter } from "@/components/TextSplitter";
 import { View } from "@react-three/drei";
 import Scene from "./Scene";
+import { Bubbles } from "@/components/Bubbles";
 
 gsap.registerPlugin(
   useGSAP,
@@ -102,6 +103,11 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
         className="hero-scene pointer-events-none sticky top-0 z-50 -mt-[100vh] hidden h-screen w-screen md:block"
       >
         <Scene/>
+        <Bubbles
+          count={300}
+          speed={2}
+          repeat={true}
+        /> {/* Add bubbles component */}
       </View>
       <div className="grid">
         <div className="grid h-screen place-items-center">
@@ -143,6 +149,11 @@ const Hero = ({ slice }: HeroProps): JSX.Element => {
             </h2>
             <div className="text-side-body mt-4 max-w-xl text-balance text-xl font-normal text-sky-950">
               <PrismicRichText field={slice.primary.second_body} />
+              {/* <Button
+                buttonLink={slice.primary.button_link}
+                buttonText={slice.primary.button_text}
+                className="hero-button mt-120"
+              /> */}
             </div>
           </div>
         </div>
