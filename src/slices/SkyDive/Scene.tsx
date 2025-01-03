@@ -10,6 +10,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import FloatingCan from "@/components/FloatingCan";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
+import { get } from "http";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -33,9 +34,109 @@ export default function Scene({ sentence, flavor }: SkyDiveProps) {
     const getXPosition = (distance: number) => distance * Math.cos(wordsAngle);
     const getYPosition = (distance: number) => distance * Math.sin(wordsAngle);
     
-    const getXYPosition = (distance: number) => ({
+    const getXYPositions = (distance: number) => ({
         x: getXPosition(distance),
-        y: getYPosition(-1 * distance)
+        y: getYPosition(-1 * distance),
+    });
+
+    useGSAP(() => {
+        if (
+            !cloudsRef.current ||
+            !canRef.current ||
+            !wordsRef.current ||
+            !cloud1Ref.current ||
+            !cloud2Ref.current
+        ) // Check if the elements are ready/there
+            return;
+
+        // Set animation screen elements start positions || initial positions
+        gsap.set(cloudsRef.current.position, { z: 10, });
+        gsap.set(canRef.current.position, {
+            ...getXYPositions(-4),
+        });
+
+
+        // animate words position
+        gsap.set(
+            wordsRef.current.children.map((word) => word.position), {
+                 ...getXYPositions(7), z: 2 
+            },
+        );
+
+        // animate can to spin on it's axis
+        gsap.to(canRef.current.rotation, {
+            y: Math.PI * 2,
+            duration: 2,
+            repeat: -1, // repeat forever
+            ease: "none",
+        });
+
+        // animate clouds to infinite loop
+        const DISTANCE = 15;
+        const DURATION = 6;
+
+        gsap.set([cloud2Ref.current.position, cloud1Ref.current.position],{
+            ...getXYPositions(DISTANCE), 
+        });
+
+        gsap.to(cloud1Ref.current.position, {
+            y: `+=${getYPosition(DISTANCE * 2)}`,
+            x: `+=${getXPosition(DISTANCE * -2)}`,
+            ease: "none",
+            repeat: -1,
+            duration: DURATION,
+        });
+
+        gsap.to(cloud2Ref.current.position, {
+            y: `+=${getYPosition(DISTANCE * 2)}`,
+            x: `+=${getXPosition(DISTANCE * -2)}`,
+            ease: "none",
+            repeat: -1,
+            delay: DURATION / 2,
+            duration: DURATION,
+        });  
+        
+        const scrollTl = gsap.timeline({
+            scrollTrigger: {
+              trigger: ".skydive",
+              pin: true,
+              start: "top top",
+              end: "+=2000",
+              scrub: 1.5,
+            },
+        });
+
+        scrollTl
+            .to("body", {
+                backgroundColor: "#C0F0F5",
+                overwrite: "auto",
+                duration: 0.1,
+            })
+            .to(cloudsRef.current.position, { z: 0, duration: 0.3 }, 0)
+            .to(canRef.current.position, {
+                x: 0,
+                y: 0,
+                duration: 0.3,
+                ease: "back.out(1.7)",
+            })
+            .to(
+                wordsRef.current.children.map((word) => word.position),
+                {
+                    keyframes: [
+                        { x: 0, y: 0, z: -1 },
+                        { ...getXYPositions(-7), z: -7 },
+                    ],
+                    stagger: 0.3,
+                },
+                0,
+            )
+            .to(canRef.current.position, {
+                ...getXYPositions(4),
+                duration: 0.5,
+                ease: "back.in(1.7)",
+            })
+            .to(cloudsRef.current.position, { z: 7, duration: 0.5 });
+
     });
 
 
@@ -47,6 +148,9 @@ export default function Scene({ sentence, flavor }: SkyDiveProps) {
             <FloatingCan
                 ref={canRef}
                 flavor={flavor}
+                rotationIntensity={0}
+                floatIntensity={3}
+                floatSpeed={3}
             >
             </FloatingCan>
         </group>
@@ -77,8 +181,7 @@ export default function Scene({ sentence, flavor }: SkyDiveProps) {
             }
         </group>
 
-        <OrbitControls />
-
+        {/* <OrbitControls /> */}
 
         {/* 3d's Lights and Environments */}
         <ambientLight intensity={2} color="#9ddefa" />
