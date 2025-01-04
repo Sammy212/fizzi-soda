@@ -16,7 +16,8 @@ type Props = {};
 
 export default function Scene({}: Props) {
   const canRef = useRef<Group>(null);
-  const isDesktop = useMediaQuery("(min-width: 768px)", true);
+
+  const isDesktop = useMediaQuery("(min-width: 768px)", true); // Check if the device is desktop
 
   const bgColors = ["#FFA6B5", "#E9CFF6", "#CBEF9A"];
 
@@ -37,33 +38,33 @@ export default function Scene({}: Props) {
             },
         });
 
-      sections.forEach((_, index) => {
-        if (!canRef.current) return;
-        if (index === 0) return;
+        sections.forEach((_, index) => {
+            if (!canRef.current) return;
+            if (index === 0) return;
 
-        const isOdd = index % 2 !== 0;
+            const isOdd = index % 2 !== 0;
 
-        const xPosition = isDesktop ? (isOdd ? "-1" : "1") : 0;
-        const yRotation = isDesktop ? (isOdd ? ".4" : "-.4") : 0;
-        scrollTl
-            .to(canRef.current.position, {
-                x: xPosition,
-                ease: "circ.inOut",
-                delay: 0.5,
-            })
-            .to(
-                canRef.current.rotation,
-                {
-                    y: yRotation,
-                    ease: "back.inOut",
-                },
-                "<",
-            )
-            .to(".alternating-text-container", {
-                backgroundColor: gsap.utils.wrap(bgColors, index),
+            const xPosition = isDesktop ? (isOdd ? "-1" : "1") : 0;
+            const yRotation = isDesktop ? (isOdd ? ".4" : "-.4") : 0;
+            scrollTl
+                .to(canRef.current.position, {
+                    x: xPosition,
+                    ease: "circ.inOut",
+                    delay: 0.5,
+                })
+                .to(
+                    canRef.current.rotation,
+                    {
+                        y: yRotation,
+                        ease: "back.inOut",
+                    },
+                    "<",
+                )
+                .to(".alternating-text-container", {
+                    backgroundColor: gsap.utils.wrap(bgColors, index),
             });
-            });
-        }, { dependencies: [isDesktop] },
+        });
+        }, { dependencies: [isDesktop] }, // Only run this effect when isDesktop changes
     );
 
     return (
