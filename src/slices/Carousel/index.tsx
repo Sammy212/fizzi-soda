@@ -6,6 +6,9 @@ import { FLAVORS } from "@/utils/data";
 import { Center, Environment, View } from "@react-three/drei";
 import FloatingCan from "@/components/FloatingCan";
 import { useState } from "react";
+import { ArrowIcon } from "@/components/ArrowIcon";
+import clsx from "clsx";
+import { dir } from "console";
 
 /**
  * Props for `Carousel`.
@@ -34,13 +37,19 @@ const Carousel = ({ slice }: CarouselProps): JSX.Element => {
       <div 
         className="background pointer-events-none absolute inset-0 bg-[#710523] opacity-50" 
       />
-      <h2 className="relative text-center text-5xl font-bold">
+      <div className="relative text-center text-5xl font-bold">
         <PrismicRichText field={slice.primary.heading} />
-      </h2>
+      </div>
 
       {/* Product Grid */}
       <div className="grid grid-cols-[auto,auto,auto] items-center">
         {/* left | Prev*/}
+        <ArrowButton
+            onClick={() => changeFlavor(currentFlavorIndex + 1)}
+            direction="left"
+            label="Previous Flavor"
+        />
+
 
         {/* can - Product */}
         <View
@@ -52,6 +61,7 @@ const Carousel = ({ slice }: CarouselProps): JSX.Element => {
             <FloatingCan
               floatIntensity={.3}
               rotationIntensity={1}
+              flavor={FLAVORS[currentFlavorIndex].flavor}
             />
           </Center>
 
@@ -68,12 +78,47 @@ const Carousel = ({ slice }: CarouselProps): JSX.Element => {
         </View>
         {/* end Can - Product */}
 
+
         {/* right | next*/}
+        <ArrowButton
+            onClick={() => changeFlavor(currentFlavorIndex - 1)}
+            direction="right"
+            label="Next Flavor"
+        />
       </div>
 
-      {/* <PrismicRichText field={slice.primary.price_copy} /> */}
+      {/* Price n product information */}
+      <div className="text-area relative mx-auto text-center">
+        <div className="text-wrapper text-4xl font-medium">
+          <p>{FLAVORS[currentFlavorIndex].name}</p>
+        </div>
+
+        <div className="mt-2 text-2xl font-normal opacity-90">
+          <PrismicRichText field={slice.primary.price_copy} />
+        </div>
+      </div>
     </section>
   );
 };
 
 export default Carousel;
+
+type ArrowButtonProps = {
+  direction?: "right" | "left";
+  label: string;
+  onClick: () => void;
+};
+
+function ArrowButton({ direction="right", onClick, label }: ArrowButtonProps) {
+  return (
+    <button
+      onClick={onClick}
+      className="size-12 rounded-full border-2 border-white bg-white/10 p-3 opacity-85 ring-white focus:outline-none focus-visible:opacity-100 focus-visible:ring-4 md:size-16 lg:size-20"
+    >
+      <ArrowIcon
+        className={clsx(direction === "right" && "-scale-x-100")}
+      />
+      <span className="sr-only">{label}</span>
+    </button>
+  );
+}
