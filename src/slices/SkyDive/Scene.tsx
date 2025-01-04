@@ -10,7 +10,6 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 
 import FloatingCan from "@/components/FloatingCan";
 import { useMediaQuery } from "@/hooks/useMediaQuery";
-import { get } from "http";
 
 gsap.registerPlugin(useGSAP, ScrollTrigger);
 
@@ -221,5 +220,5 @@ function ThreeText({ sentence, color="white"}: {
         >
             {word}
         </Text>
-    ))
+    ));
 }

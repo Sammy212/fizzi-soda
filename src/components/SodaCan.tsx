@@ -4,14 +4,8 @@ import { useGLTF, useTexture } from "@react-three/drei";
 import * as THREE from "three";
 
 useGLTF.preload("/Soda-can.gltf");
+import { flavorTextures } from "@/utils/data";
 
-const flavorTextures = {
-  lemonLime: "/labels/lemon-lime.png",
-  grape: "/labels/grape.png",
-  blackCherry: "/labels/cherry.png",
-  strawberryLemonade: "/labels/strawberry.png",
-  watermelon: "/labels/watermelon.png",
-};
 
 const metalMaterial = new THREE.MeshStandardMaterial({
   roughness: 0.3,
